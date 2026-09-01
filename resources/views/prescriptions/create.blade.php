@@ -3,6 +3,16 @@
 @section('title', 'New Prescription | OptiArchive')
 
 @section('content')
+@if ($errors->any())
+    <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-800">
+        <ul class="list-disc pl-5">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="mx-auto max-w-5xl space-y-6">
 
     {{-- Header --}}
@@ -126,10 +136,11 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="right_sph"
                             name="right_sph"
                             value="{{ old('right_sph') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -142,10 +153,11 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="right_cyl"
                             name="right_cyl"
                             value="{{ old('right_cyl') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -158,10 +170,13 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="right_axis"
                             name="right_axis"
                             value="{{ old('right_axis') }}"
+                            min="0"
+                            max="180"
+                            step="1"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -186,10 +201,11 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="left_sph"
                             name="left_sph"
                             value="{{ old('left_sph') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -202,10 +218,11 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="left_cyl"
                             name="left_cyl"
                             value="{{ old('left_cyl') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -218,10 +235,13 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="left_axis"
                             name="left_axis"
                             value="{{ old('left_axis') }}"
+                            min="0"
+                            max="180"
+                            step="1"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -241,15 +261,16 @@
                     {{-- Right Eye ADD --}}
                     <div>
                         <label for="right_add"
-                            class="block text-sm font-medium text-gray-700">
+                               class="block text-sm font-medium text-gray-700">
                             Right Eye ADD
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="right_add"
                             name="right_add"
                             value="{{ old('right_add') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -257,15 +278,16 @@
                     {{-- Left Eye ADD --}}
                     <div>
                         <label for="left_add"
-                            class="block text-sm font-medium text-gray-700">
+                               class="block text-sm font-medium text-gray-700">
                             Left Eye ADD
                         </label>
 
                         <input
-                            type="text"
+                            type="number"
                             id="left_add"
                             name="left_add"
                             value="{{ old('left_add') }}"
+                            step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
                     </div>
@@ -357,3 +379,4 @@
 
 </div>
 @endsection
+

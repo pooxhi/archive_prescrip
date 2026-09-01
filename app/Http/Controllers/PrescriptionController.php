@@ -11,11 +11,34 @@ class PrescriptionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $prescriptions = Prescription::latest('prescription_date')->get();
+        $search = $request->input('search');
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
 
-        return view('prescriptions.index', compact('prescriptions'));
+        $prescriptions = Prescription::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('customer', 'like', "%{$search}%")
+                        ->orWhere('reference_number', 'like', "%{$search}%");
+                });
+            })
+            ->when($fromDate, function ($query, $fromDate) {
+                $query->whereDate('prescription_date', '>=', $fromDate);
+            })
+            ->when($toDate, function ($query, $toDate) {
+                $query->whereDate('prescription_date', '<=', $toDate);
+            })
+            ->latest('prescription_date')
+            ->get();
+
+        return view('prescriptions.index', compact(
+            'prescriptions',
+            'search',
+            'fromDate',
+            'toDate'
+        ));
     }
 
     /**
