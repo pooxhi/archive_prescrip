@@ -3,6 +3,13 @@
 @section('title', 'Prescriptions | OptiArchive')
 
 @section('content')
+
+@if (session('success'))
+    <div class="mx-auto mb-4 max-w-7xl rounded-xl bg-green-100 px-4 py-3 text-sm font-medium text-green-800">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="mx-auto max-w-7xl space-y-6">
 
     <div class="space-y-4">
@@ -210,6 +217,22 @@
                                         >
                                             Edit
                                         </a>
+
+                                        <form
+                                            method="POST"
+                                            action="{{ route('prescriptions.destroy', $prescription) }}"
+                                            onsubmit="return confirm('Are you sure you want to delete this prescription?');"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button
+                                                type="submit"
+                                                class="font-semibold text-red-600 hover:text-red-800"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
 
                                     </div>
 

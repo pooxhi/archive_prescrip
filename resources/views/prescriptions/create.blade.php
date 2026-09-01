@@ -378,5 +378,22 @@
     </form>
 
 </div>
+
+<script>
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'e' || event.key === 'E') {
+                event.preventDefault();
+            }
+
+            if (
+                (this.id === 'right_axis' || this.id === 'left_axis') &&
+                (event.key === '+' || event.key === '-')
+            ) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 @endsection
 
