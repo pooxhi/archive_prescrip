@@ -3,12 +3,13 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::view('/dashboard', 'dashboard.index')
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('dashboard');
 

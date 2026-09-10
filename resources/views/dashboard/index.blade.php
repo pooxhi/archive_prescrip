@@ -28,12 +28,28 @@
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        @foreach([
-            ['label' => 'Total Patients', 'value' => '248', 'meta' => '+12 this month'],
-            ['label' => 'Prescription Records', 'value' => '532', 'meta' => '+24 this month'],
-            ['label' => 'OCR Scans', 'value' => '124', 'meta' => '96.8% avg. confidence'],
-            ['label' => "Today's Entries", 'value' => '18', 'meta' => '+5 since yesterday'],
-        ] as $stat)
+            @foreach([
+                    [
+                        'label' => 'Total Prescriptions',
+                        'value' => $totalPrescriptions,
+                        'meta' => 'All prescription records',
+                    ],
+                    [
+                        'label' => "Today's Prescriptions",
+                        'value' => $todayPrescriptions,
+                        'meta' => 'Created today',
+                    ],
+                    [
+                        'label' => 'This Month',
+                        'value' => $monthPrescriptions,
+                        'meta' => now()->format('F Y'),
+                    ],
+                    [
+                        'label' => 'Total Amount Due',
+                        'value' => '₱' . number_format($totalAmountDue, 2),
+                        'meta' => 'Across all prescriptions',
+                    ],
+            ] as $stat)
             <x-card class="flex flex-col justify-between">
                 <div class="flex items-start justify-between gap-4">
                     <div>
