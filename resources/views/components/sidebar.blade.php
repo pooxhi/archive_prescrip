@@ -49,13 +49,6 @@
                 Dashboard
             </a>
 
-            <a href="#" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 19a6 6 0 0 0-12 0m6-8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7-1v6m3-3h-6"/>
-                </svg>
-                Patients
-            </a>
-
             <a
                 href="{{ route('prescriptions.index') }}"
                 class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ request()->routeIs('prescriptions.*') ? 'bg-white text-[#1F6F5F] shadow-sm' : 'text-white/78 hover:bg-white/10 hover:text-white' }}"
@@ -67,17 +60,6 @@
 
                 Prescriptions
             </a>
-
-            <a href="#" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7V5a1 1 0 0 1 1-1h2m11 3V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2m11-3v2a1 1 0 0 1-1 1h-2"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 12h10M12 7v10"/>
-                </svg>
-                OCR Scanner
-                <span class="ml-auto rounded-full bg-[#6FCF97]/18 px-2 py-0.5 text-[9px] font-bold text-[#BFF2D0]">
-                    AI
-                </span>
-            </a>
         </div>
 
         <p class="mb-3 mt-8 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
@@ -85,19 +67,14 @@
         </p>
 
         <div class="space-y-1.5">
-            <a href="#" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4" fill="none"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-                Staff
-            </a>
-
-            <a href="#" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">
+            <a
+                href="{{ route('activity-logs.index') }}"
+                class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ request()->routeIs('activity-logs.*') ? 'bg-white text-[#1F6F5F] shadow-sm' : 'text-white/78 hover:bg-white/10 hover:text-white' }}"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12h4l2-7 4 14 2-7h6"/>
                 </svg>
+
                 Activity Logs
             </a>
 
@@ -112,13 +89,29 @@
     </nav>
 
     <div class="border-t border-white/10 p-4">
+        @php
+            $user = Auth::user();
+
+            $initials = collect(explode(' ', trim($user->name)))
+                ->filter()
+                ->map(fn ($name) => strtoupper(substr($name, 0, 1)))
+                ->take(2)
+                ->implode('');
+        @endphp
+
         <div class="flex items-center gap-3 rounded-xl bg-white/10 p-3">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#6FCF97] text-sm font-bold text-[#1F6F5F]">
-                DS
+                {{ $initials }}
             </div>
+
             <div class="min-w-0">
-                <p class="truncate text-sm font-semibold">Dr. Santos</p>
-                <p class="truncate text-xs text-white/50">Administrator</p>
+                <p class="truncate text-sm font-semibold">
+                    {{ $user->name }}
+                </p>
+
+                <p class="truncate text-xs text-white/50">
+                    {{ ucfirst($user->role) }}
+                </p>
             </div>
         </div>
     </div>

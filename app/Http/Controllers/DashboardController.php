@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Prescription;
 
 class DashboardController extends Controller
@@ -22,12 +23,18 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $recentActivities = ActivityLog::with('user', 'subject')
+            ->latest('created_at')
+            ->take(5)
+            ->get();
+
         return view('dashboard.index', compact(
             'totalPrescriptions',
             'todayPrescriptions',
             'monthPrescriptions',
             'totalAmountDue',
-            'recentPrescriptions'
+            'recentPrescriptions',
+            'recentActivities'
         ));
     }
 }

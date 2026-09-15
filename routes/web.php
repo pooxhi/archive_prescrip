@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -12,6 +13,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('dashboard');
+
+Route::get('/activity-logs', [ActivityLogController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('activity-logs.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

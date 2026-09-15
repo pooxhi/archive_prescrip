@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Prescription;
+use App\Models\ActivityLog;
 
 class PrescriptionController extends Controller
 {
@@ -97,6 +98,17 @@ class PrescriptionController extends Controller
             'amount_due' => $validated['amount_due'] ?? null,
         ]);
 
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'created',
+            'subject_type' => Prescription::class,
+            'subject_id' => $prescription->id,
+            'metadata' => [
+                'customer' => $prescription->customer,
+                'reference_number' => $prescription->reference_number,
+            ],
+        ]);
+
         return redirect()
             ->route('prescriptions.show', $prescription)
             ->with('success', 'Prescription saved successfully.');
@@ -163,6 +175,17 @@ class PrescriptionController extends Controller
             'pd' => $validated['pd'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'amount_due' => $validated['amount_due'] ?? null,
+        ]);
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'updated',
+            'subject_type' => Prescription::class,
+            'subject_id' => $prescription->id,
+            'metadata' => [
+                'customer' => $prescription->customer,
+                'reference_number' => $prescription->reference_number,
+            ],
         ]);
 
         return redirect()

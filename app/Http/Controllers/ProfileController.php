@@ -48,6 +48,12 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        if ($user->prescriptions()->exists()) {
+            return redirect()
+                ->route('profile.edit')
+                ->with('delete_error', 'Your account cannot be deleted because it is associated with existing prescription records.');
+        }
+
         Auth::logout();
 
         $user->delete();
