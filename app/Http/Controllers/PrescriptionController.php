@@ -32,7 +32,8 @@ class PrescriptionController extends Controller
                 $query->whereDate('prescription_date', '<=', $toDate);
             })
             ->latest('prescription_date')
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
 
         return view('prescriptions.index', compact(
             'prescriptions',
@@ -40,6 +41,28 @@ class PrescriptionController extends Controller
             'fromDate',
             'toDate'
         ));
+    }
+
+    public function deleted(Request $request)
+    {
+        $search = $request->input('search');
+
+        $prescriptions = Prescription::onlyTrashed()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('customer', 'like', "%{$search}%")
+                        ->orWhere('reference_number', 'like', "%{$search}%");
+                });
+            })
+            ->latest('deleted_at')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('prescriptions.deleted', [
+            'prescriptions' => $prescriptions,
+            'search' => $search,
+            'retentionYears' => config('prescriptions.retention_years', 10),
+        ]);
     }
 
     /**
@@ -198,10 +221,21 @@ class PrescriptionController extends Controller
      */
     public function destroy(Prescription $prescription)
     {
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'deleted',
+            'subject_type' => Prescription::class,
+            'subject_id' => $prescription->id,
+            'metadata' => [
+                'customer' => $prescription->customer,
+                'reference_number' => $prescription->reference_number,
+            ],
+        ]);
+
         $prescription->delete();
 
         return redirect()
             ->route('prescriptions.index')
-            ->with('success', 'Prescription deleted successfully.');
+            ->with('success', 'Prescription moved to the deletion period.');
     }
 }

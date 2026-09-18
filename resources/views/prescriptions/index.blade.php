@@ -4,12 +4,6 @@
 
 @section('content')
 
-@if (session('success'))
-    <div class="mx-auto mb-4 max-w-7xl rounded-xl bg-green-100 px-4 py-3 text-sm font-medium text-green-800">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="mx-auto max-w-7xl space-y-6">
 
     <div class="space-y-4">
@@ -221,7 +215,10 @@
                                         <form
                                             method="POST"
                                             action="{{ route('prescriptions.destroy', $prescription) }}"
-                                            onsubmit="return confirm('Are you sure you want to delete this prescription?');"
+                                            data-swal-confirm
+                                            data-swal-title="Delete prescription?"
+                                            data-swal-text="This prescription will be marked as deleted and retained according to the clinic's retention policy."
+                                            data-swal-confirm-text="Delete"
                                         >
                                             @csrf
                                             @method('DELETE')
@@ -246,8 +243,79 @@
 
                 </table>
             </div>
+            @if ($prescriptions->hasPages())
+                <div class="flex items-center justify-between border-t border-gray-100 px-6 py-4">
+                    <p class="text-sm text-gray-500">
+                        Showing
+                        <span class="font-medium text-gray-700">
+                            {{ $prescriptions->firstItem() }}
+                        </span>
+                        to
+                        <span class="font-medium text-gray-700">
+                            {{ $prescriptions->lastItem() }}
+                        </span>
+                        of
+                        <span class="font-medium text-gray-700">
+                            {{ $prescriptions->total() }}
+                        </span>
+                        prescriptions
+                    </p>
 
-        @endif
+                    <div class="flex items-center gap-1">
+                        {{-- Previous --}}
+                        @if ($prescriptions->onFirstPage())
+                            <span
+                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300"
+                            >
+                                Previous
+                            </span>
+                        @else
+                            <a
+                                href="{{ $prescriptions->previousPageUrl() }}"
+                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
+                            >
+                                Previous
+                            </a>
+                        @endif
+
+                        {{-- Page Numbers --}}
+                        @foreach ($prescriptions->getUrlRange(1, $prescriptions->lastPage()) as $page => $url)
+                            @if ($page == $prescriptions->currentPage())
+                                <span
+                                    class="rounded-lg bg-[#2FA084] px-3 py-2 text-sm font-semibold text-white"
+                                >
+                                    {{ $page }}
+                                </span>
+                            @else
+                                <a
+                                    href="{{ $url }}"
+                                    class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
+                                >
+                                    {{ $page }}
+                                </a>
+                            @endif
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if ($prescriptions->hasMorePages())
+                            <a
+                                href="{{ $prescriptions->nextPageUrl() }}"
+                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
+                            >
+                                Next
+                            </a>
+                        @else
+                            <span
+                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300"
+                            >
+                                Next
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
+            @endif
 
     </div>
 

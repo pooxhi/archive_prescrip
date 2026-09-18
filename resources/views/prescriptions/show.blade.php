@@ -20,12 +20,6 @@
         </p>
     </div>
 
-    @if (session('success'))
-        <div class="rounded-lg bg-green-100 px-4 py-3 text-sm text-green-800">
-            {{ session('success') }}
-        </div>
-    @endif
-
     {{-- General Information --}}
     <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
 
