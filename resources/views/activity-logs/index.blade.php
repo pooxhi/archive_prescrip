@@ -57,14 +57,34 @@
 
                             <td class="px-5 py-4 text-sm text-slate-600">
                                 @if ($activity->subject instanceof \App\Models\Prescription)
+
                                     Prescription:
                                     {{ $activity->subject->customer }}
 
                                     @if ($activity->subject->reference_number)
                                         ({{ $activity->subject->reference_number }})
                                     @endif
+
+                                @elseif (
+                                    $activity->subject_type === \App\Models\Prescription::class
+                                    && !empty($activity->metadata['customer'])
+                                )
+
+                                    Prescription:
+                                    {{ $activity->metadata['customer'] }}
+
+                                    @if (!empty($activity->metadata['reference_number']))
+                                        ({{ $activity->metadata['reference_number'] }})
+                                    @endif
+
+                                    <span class="ml-1 text-xs text-slate-400">
+                                        (Deleted)
+                                    </span>
+
                                 @elseif ($activity->subject_type)
+
                                     {{ class_basename($activity->subject_type) }}
+
                                 @else
                                     —
                                 @endif

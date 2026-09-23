@@ -13,9 +13,72 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form
+        method="post"
+        action="{{ route('profile.update') }}"
+        enctype="multipart/form-data"
+        class="mt-6 space-y-6"
+    >
         @csrf
         @method('patch')
+
+        <div>
+            <x-input-label for="profile_photo" :value="__('Profile Photo')" />
+
+            <div class="mt-3 flex items-center gap-4">
+
+                @if ($user->profile_photo_path)
+                    <img
+                        src="{{ asset('storage/' . $user->profile_photo_path) }}"
+                        alt="{{ $user->name }}"
+                        class="h-16 w-16 rounded-full object-cover ring-2 ring-[#2FA084]/20"
+                    >
+                @else
+                    @php
+                        $initials = collect(explode(' ', trim($user->name)))
+                            ->filter()
+                            ->map(fn ($name) => strtoupper(substr($name, 0, 1)))
+                            ->take(2)
+                            ->implode('');
+                    @endphp
+
+                    <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#6FCF97] text-lg font-bold text-[#1F6F5F]">
+                        {{ $initials }}
+                    </div>
+                @endif
+
+                <div class="flex-1">
+                    <input
+                        id="profile_photo"
+                        name="profile_photo"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        class="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-[#EEEEEE] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#1F6F5F] hover:file:bg-gray-200"
+                    >
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        JPG, PNG, or WEBP. Maximum size: 2 MB.
+                    </p>
+
+                    <x-input-error
+                        class="mt-2"
+                        :messages="$errors->get('profile_photo')"
+                    />
+                </div>
+            </div>
+        </div>
+
+        @if ($user->profile_photo_path)
+            <div>
+                <x-danger-button
+                    type="submit"
+                    name="remove_photo"
+                    value="1"
+                >
+                    Remove Photo
+                </x-danger-button>
+            </div>
+        @endif
 
         <div>
             <x-input-label for="name" :value="__('Name')" />

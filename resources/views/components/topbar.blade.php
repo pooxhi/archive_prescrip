@@ -64,9 +64,17 @@
                     aria-haspopup="true"
                 >
                     <!-- Avatar -->
-                    <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#6FCF97] text-xs font-bold text-[#1F6F5F]">
-                        {{ $initials }}
-                    </div>
+                    @if ($user->profile_photo_path)
+                        <img
+                            src="{{ asset('storage/' . $user->profile_photo_path) }}"
+                            alt="{{ $user->name }}"
+                            class="h-9 w-9 rounded-full object-cover ring-2 ring-[#2FA084]/20"
+                        >
+                    @else
+                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#6FCF97] text-xs font-bold text-[#1F6F5F]">
+                            {{ $initials }}
+                        </div>
+                    @endif
 
                     <!-- User Information -->
                     <div class="hidden sm:block">

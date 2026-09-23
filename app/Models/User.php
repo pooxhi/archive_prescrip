@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
     'password',
     'role',
     'is_active',
+    'profile_photo_path',
 ])]
 #[Hidden([
     'password',

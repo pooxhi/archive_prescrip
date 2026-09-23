@@ -51,7 +51,7 @@
 
             <a
                 href="{{ route('prescriptions.index') }}"
-                class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ request()->routeIs('prescriptions.*') ? 'bg-white text-[#1F6F5F] shadow-sm' : 'text-white/78 hover:bg-white/10 hover:text-white' }}"
+                class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ request()->routeIs('prescriptions.index', 'prescriptions.create', 'prescriptions.show', 'prescriptions.edit') ? 'bg-white text-[#1F6F5F] shadow-sm' : 'text-white/78 hover:bg-white/10 hover:text-white' }}"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
@@ -76,6 +76,28 @@
                 </svg>
 
                 Activity Logs
+            </a>
+
+            <a
+                href="{{ route('prescriptions.deleted') }}"
+                class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ request()->routeIs('prescriptions.deleted') ? 'bg-white text-[#1F6F5F] shadow-sm' : 'text-white/78 hover:bg-white/10 hover:text-white' }}"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M7 7h10M9 7V5h6v2M6 7l1 14h10l1-14M10 11v6M14 11v6"
+                    />
+                </svg>
+
+                Deleted Prescriptions
             </a>
 
             <a href="#" class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/78 transition hover:bg-white/10 hover:text-white">

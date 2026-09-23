@@ -59,6 +59,10 @@
                         value="{{ old('customer') }}"
                         class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                     >
+
+                    @error('customer')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Address --}}
@@ -143,6 +147,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('right_sph')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- CYL --}}
@@ -160,6 +167,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('right_cyl')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Axis --}}
@@ -179,6 +189,9 @@
                             step="1"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('right_axis')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>
@@ -208,6 +221,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('left_sph')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- CYL --}}
@@ -225,6 +241,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('left_cyl')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Axis --}}
@@ -244,6 +263,9 @@
                             step="1"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('left_axis')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>
@@ -273,6 +295,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('right_add')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Left Eye ADD --}}
@@ -290,6 +315,9 @@
                             step="0.01"
                             class="mt-2 block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                         >
+                        @error('left_add')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>
@@ -312,7 +340,9 @@
                         value="{{ old('pd') }}"
                         class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                     >
-
+                    @error('pd')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
@@ -352,7 +382,9 @@
                         step="0.01"
                         class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-[#2FA084] focus:ring-[#2FA084]"
                     >
-
+                    @error('amount_due')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 

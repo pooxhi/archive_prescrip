@@ -10,38 +10,44 @@ use App\Models\ActivityLog;
 class PrescriptionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $search = $request->input('search');
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
+ * Display a listing of the resource.
+ */
+public function index(Request $request)
+{
+    $validated = $request->validate([
+        'search' => ['nullable', 'string', 'max:255'],
+        'from_date' => ['nullable', 'date'],
+        'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
+    ]);
 
-        $prescriptions = Prescription::query()
-            ->when($search, function ($query, $search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('customer', 'like', "%{$search}%")
-                        ->orWhere('reference_number', 'like', "%{$search}%");
-                });
-            })
-            ->when($fromDate, function ($query, $fromDate) {
-                $query->whereDate('prescription_date', '>=', $fromDate);
-            })
-            ->when($toDate, function ($query, $toDate) {
-                $query->whereDate('prescription_date', '<=', $toDate);
-            })
-            ->latest('prescription_date')
-            ->paginate(5)
-            ->withQueryString();
+    $search = $validated['search'] ?? null;
+    $fromDate = $validated['from_date'] ?? null;
+    $toDate = $validated['to_date'] ?? null;
 
-        return view('prescriptions.index', compact(
-            'prescriptions',
-            'search',
-            'fromDate',
-            'toDate'
-        ));
-    }
+    $prescriptions = Prescription::query()
+        ->when($search, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('customer', 'like', "%{$search}%")
+                    ->orWhere('reference_number', 'like', "%{$search}%");
+            });
+        })
+        ->when($fromDate, function ($query, $fromDate) {
+            $query->whereDate('prescription_date', '>=', $fromDate);
+        })
+        ->when($toDate, function ($query, $toDate) {
+            $query->whereDate('prescription_date', '<=', $toDate);
+        })
+        ->latest('prescription_date')
+        ->paginate(5)
+        ->withQueryString();
+
+    return view('prescriptions.index', compact(
+        'prescriptions',
+        'search',
+        'fromDate',
+        'toDate'
+    ));
+}
 
     public function deleted(Request $request)
     {

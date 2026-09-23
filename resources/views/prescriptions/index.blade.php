@@ -4,6 +4,11 @@
 
 @section('content')
 
+@if ($errors->any())
+    <div class="mx-auto mb-4 max-w-7xl rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ $errors->first() }}
+    </div>
+@endif
 <div class="mx-auto max-w-7xl space-y-6">
 
     <div class="space-y-4">
