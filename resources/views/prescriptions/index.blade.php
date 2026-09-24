@@ -4,6 +4,19 @@
 
 @section('content')
 
+@if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: @json(session('success')),
+                confirmButtonColor: '#2FA084'
+            });
+        });
+    </script>
+@endif
+
 @if ($errors->any())
     <div class="mx-auto mb-4 max-w-7xl rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
         {{ $errors->first() }}

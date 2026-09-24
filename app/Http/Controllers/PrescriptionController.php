@@ -2,53 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Prescription;
 use App\Models\ActivityLog;
+use App\Models\Prescription;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Authorize;
 
 class PrescriptionController extends Controller
 {
     /**
- * Display a listing of the resource.
- */
-public function index(Request $request)
-{
-    $validated = $request->validate([
-        'search' => ['nullable', 'string', 'max:255'],
-        'from_date' => ['nullable', 'date'],
-        'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
-    ]);
+     * Display a listing of the resource.
+     */
+    #[Authorize('viewAny', [Prescription::class])]
+    public function index(Request $request)
+    {
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'from_date' => ['nullable', 'date'],
+            'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
+        ]);
 
-    $search = $validated['search'] ?? null;
-    $fromDate = $validated['from_date'] ?? null;
-    $toDate = $validated['to_date'] ?? null;
+        $search = $validated['search'] ?? null;
+        $fromDate = $validated['from_date'] ?? null;
+        $toDate = $validated['to_date'] ?? null;
 
-    $prescriptions = Prescription::query()
-        ->when($search, function ($query, $search) {
-            $query->where(function ($query) use ($search) {
-                $query->where('customer', 'like', "%{$search}%")
-                    ->orWhere('reference_number', 'like', "%{$search}%");
-            });
-        })
-        ->when($fromDate, function ($query, $fromDate) {
-            $query->whereDate('prescription_date', '>=', $fromDate);
-        })
-        ->when($toDate, function ($query, $toDate) {
-            $query->whereDate('prescription_date', '<=', $toDate);
-        })
-        ->latest('prescription_date')
-        ->paginate(5)
-        ->withQueryString();
+        $prescriptions = Prescription::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('customer', 'like', "%{$search}%")
+                        ->orWhere('reference_number', 'like', "%{$search}%");
+                });
+            })
+            ->when($fromDate, function ($query, $fromDate) {
+                $query->whereDate('prescription_date', '>=', $fromDate);
+            })
+            ->when($toDate, function ($query, $toDate) {
+                $query->whereDate('prescription_date', '<=', $toDate);
+            })
+            ->latest('prescription_date')
+            ->paginate(5)
+            ->withQueryString();
 
-    return view('prescriptions.index', compact(
-        'prescriptions',
-        'search',
-        'fromDate',
-        'toDate'
-    ));
-}
+        return view('prescriptions.index', compact(
+            'prescriptions',
+            'search',
+            'fromDate',
+            'toDate'
+        ));
+    }
 
+    /**
+     * Display deleted prescriptions within the retention period.
+     */
+    #[Authorize('viewAny', [Prescription::class])]
     public function deleted(Request $request)
     {
         $search = $request->input('search');
@@ -74,6 +79,7 @@ public function index(Request $request)
     /**
      * Show the form for creating a new resource.
      */
+    #[Authorize('create', [Prescription::class])]
     public function create()
     {
         return view('prescriptions.create');
@@ -82,6 +88,7 @@ public function index(Request $request)
     /**
      * Store a newly created resource in storage.
      */
+    #[Authorize('create', [Prescription::class])]
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -146,6 +153,7 @@ public function index(Request $request)
     /**
      * Display the specified resource.
      */
+    #[Authorize('view', 'prescription')]
     public function show(Prescription $prescription)
     {
         return view('prescriptions.show', compact('prescription'));
@@ -154,6 +162,7 @@ public function index(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
+    #[Authorize('update', 'prescription')]
     public function edit(Prescription $prescription)
     {
         return view('prescriptions.edit', compact('prescription'));
@@ -162,6 +171,7 @@ public function index(Request $request)
     /**
      * Update the specified resource in storage.
      */
+    #[Authorize('update', 'prescription')]
     public function update(Request $request, Prescription $prescription)
     {
         $validated = $request->validate([
@@ -225,6 +235,7 @@ public function index(Request $request)
     /**
      * Remove the specified resource from storage.
      */
+    #[Authorize('delete', 'prescription')]
     public function destroy(Prescription $prescription)
     {
         ActivityLog::create([

@@ -137,14 +137,15 @@
             <form
                 method="POST"
                 action="{{ route('prescriptions.destroy', $prescription) }}"
-                onsubmit="return confirm('Are you sure you want to delete this prescription? This cannot be undone.');"
+                id="delete-prescription-form"
             >
                 @csrf
                 @method('DELETE')
 
                 <button
-                    type="submit"
-                    class="rounded-xl border border-red-200 px-5 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                    type="button"
+                    id="delete-prescription-button"
+                    class="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
                 >
                     Delete
                 </button>
@@ -155,4 +156,31 @@
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButton = document.getElementById('delete-prescription-button');
+        const deleteForm = document.getElementById('delete-prescription-form');
+
+        if (deleteButton && deleteForm) {
+            deleteButton.addEventListener('click', function () {
+                Swal.fire({
+                    title: 'Delete prescription?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Yes, delete it',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteForm.submit();
+                    }
+                });
+            });
+        }
+    });
+</script>
+
 @endsection

@@ -10,7 +10,6 @@
 
 <div class="mx-auto max-w-5xl space-y-6">
 
-```
 {{-- Header --}}
 <div>
     <p class="text-sm font-semibold text-[#2FA084]">
@@ -418,7 +417,6 @@
     </div>
 
 </form>
-```
 
 </div>
 @endsection
