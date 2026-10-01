@@ -6,7 +6,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -17,6 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class,
         ]);
+
+        $middleware->trustHosts(
+            at: [
+                '^127\.0\.0\.1$',
+                '^localhost$',
+            ],
+            subdomains: false,
+        );
 
         $middleware->web(append: [
             SecurityHeaders::class,

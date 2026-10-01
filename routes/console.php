@@ -11,3 +11,6 @@ Artisan::command('inspire', function () {
 Schedule::command('prescriptions:purge-expired')
     ->dailyAt('02:00')
     ->timezone('Asia/Manila');
+
+Schedule::command('auth:clear-resets')
+    ->everyFifteenMinutes();
