@@ -22,8 +22,10 @@
         {{ $errors->first() }}
     </div>
 @endif
+
 <div class="mx-auto max-w-7xl space-y-6">
 
+    {{-- Page Header --}}
     <div class="space-y-4">
         <div class="flex items-center justify-between">
             <div>
@@ -44,6 +46,7 @@
             </a>
         </div>
 
+        {{-- Search and Date Filters --}}
         <form method="GET" action="{{ route('prescriptions.index') }}">
             <div class="grid gap-3 md:grid-cols-4">
 
@@ -70,7 +73,7 @@
                         for="from_date"
                         class="mb-1 block text-xs font-semibold text-gray-600"
                     >
-                        Starting from
+                        Prescription date — starting from
                     </label>
 
                     <input
@@ -87,7 +90,7 @@
                         for="to_date"
                         class="mb-1 block text-xs font-semibold text-gray-600"
                     >
-                        Ending on
+                        Prescription date — ending on
                     </label>
 
                     <input
@@ -100,29 +103,28 @@
                 </div>
 
                 <div class="flex items-end gap-2">
-
                     <button
                         type="submit"
                         class="rounded-xl bg-[#2FA084] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1F6F5F]"
                     >
                         Filter
                     </button>
-
+                    
                     @if (!empty($search) || !empty($fromDate) || !empty($toDate))
                         <a
                             href="{{ route('prescriptions.index') }}"
-                            class="rounded-xl px-5 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-100"
+                            class="inline-flex items-center justify-center rounded-xl border border-[#6FCF97] bg-[#6FCF97] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:border-[#58BE83] hover:bg-[#58BE83]"
                         >
                             Clear
                         </a>
                     @endif
-
                 </div>
 
             </div>
         </form>
     </div>
 
+    {{-- Prescription Archive Table --}}
     <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
 
         @if ($prescriptions->isEmpty())
@@ -166,6 +168,7 @@
 
                     <thead>
                         <tr class="border-b border-gray-100 bg-gray-50">
+
                             <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                                 Customer
                             </th>
@@ -175,7 +178,7 @@
                             </th>
 
                             <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                Date
+                                Prescription Date
                             </th>
 
                             <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -185,6 +188,7 @@
                             <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-gray-500">
                                 Action
                             </th>
+
                         </tr>
                     </thead>
 
@@ -216,6 +220,7 @@
 
                                     <div class="flex items-center gap-3">
 
+                                        {{-- View Prescription --}}
                                         <a
                                             href="{{ route('prescriptions.show', $prescription) }}"
                                             class="font-semibold text-[#2FA084] hover:text-[#1F6F5F]"
@@ -223,6 +228,7 @@
                                             View
                                         </a>
 
+                                        {{-- Edit Prescription --}}
                                         <a
                                             href="{{ route('prescriptions.edit', $prescription) }}"
                                             class="font-semibold text-gray-600 hover:text-gray-900"
@@ -230,6 +236,7 @@
                                             Edit
                                         </a>
 
+                                        {{-- Delete Prescription --}}
                                         <form
                                             method="POST"
                                             action="{{ route('prescriptions.destroy', $prescription) }}"
@@ -261,81 +268,103 @@
 
                 </table>
             </div>
+
+            {{-- Pagination --}}
             @if ($prescriptions->hasPages())
+
                 <div class="flex items-center justify-between border-t border-gray-100 px-6 py-4">
+
                     <p class="text-sm text-gray-500">
                         Showing
+
                         <span class="font-medium text-gray-700">
                             {{ $prescriptions->firstItem() }}
                         </span>
+
                         to
+
                         <span class="font-medium text-gray-700">
                             {{ $prescriptions->lastItem() }}
                         </span>
+
                         of
+
                         <span class="font-medium text-gray-700">
                             {{ $prescriptions->total() }}
                         </span>
+
                         prescriptions
                     </p>
 
                     <div class="flex items-center gap-1">
+
                         {{-- Previous --}}
                         @if ($prescriptions->onFirstPage())
-                            <span
-                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300"
-                            >
+
+                            <span class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300">
                                 Previous
                             </span>
+
                         @else
+
                             <a
                                 href="{{ $prescriptions->previousPageUrl() }}"
                                 class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
                             >
                                 Previous
                             </a>
+
                         @endif
 
                         {{-- Page Numbers --}}
                         @foreach ($prescriptions->getUrlRange(1, $prescriptions->lastPage()) as $page => $url)
+
                             @if ($page == $prescriptions->currentPage())
-                                <span
-                                    class="rounded-lg bg-[#2FA084] px-3 py-2 text-sm font-semibold text-white"
-                                >
+
+                                <span class="rounded-lg bg-[#2FA084] px-3 py-2 text-sm font-semibold text-white">
                                     {{ $page }}
                                 </span>
+
                             @else
+
                                 <a
                                     href="{{ $url }}"
                                     class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
                                 >
                                     {{ $page }}
                                 </a>
+
                             @endif
+
                         @endforeach
 
                         {{-- Next --}}
                         @if ($prescriptions->hasMorePages())
+
                             <a
                                 href="{{ $prescriptions->nextPageUrl() }}"
                                 class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-[#2FA084] hover:bg-[#EEEEEE] hover:text-[#1F6F5F]"
                             >
                                 Next
                             </a>
+
                         @else
-                            <span
-                                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300"
-                            >
+
+                            <span class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-300">
                                 Next
                             </span>
+
                         @endif
+
                     </div>
                 </div>
-                @endif
 
             @endif
+
+        @endif
 
     </div>
 
 </div>
+
 @endsection
